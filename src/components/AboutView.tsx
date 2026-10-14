@@ -267,20 +267,27 @@ export const AboutView: React.FC<AboutViewProps> = ({
               ))}
             </div>
 
-            {/* Sub Perks (Humor do Canal) */}
-            <div className={`mt-5 p-4 rounded-2xl border ${
-              isDark ? 'bg-purple-950/20 border-purple-500/20' : 'bg-purple-50 border-purple-200'
-            }`}>
-              <div className="flex items-center gap-2 text-xs font-bold text-purple-600 dark:text-purple-300 mb-2">
-                <Star className="w-4 h-4 fill-purple-500" />
-                <span>Vantagens de se Inscrever (SUB):</span>
+            {/* Atalho para aba de Inscrições e Doações */}
+            <div
+              className={`mt-4 p-4 rounded-2xl border flex items-center justify-between gap-3 ${
+                isDark
+                  ? 'bg-purple-950/20 border-purple-500/20'
+                  : 'bg-purple-50 border-purple-200'
+              }`}
+            >
+              <div className="flex items-center gap-2 text-xs font-semibold">
+                <Heart className="w-4 h-4 text-pink-500 flex-shrink-0" />
+                <span className={isDark ? 'text-zinc-300' : 'text-slate-700'}>
+                  Quer apoiar o streamer ou se tornar SUB?
+                </span>
               </div>
-              <ul className={`text-xs space-y-1 list-disc list-inside ${isDark ? 'text-zinc-300' : 'text-slate-700'}`}>
-                <li>Assista à live sem anúncios (Ad-Free)</li>
-                <li>2x pontos na loja de recompensas da live</li>
-                <li>Emotes exclusivos e distintivo no chat</li>
-                <li>Participação nos sorteios da comunidade</li>
-              </ul>
+              <button
+                type="button"
+                onClick={onNavigateToDonations}
+                className="px-3.5 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold transition flex-shrink-0 cursor-pointer shadow-sm"
+              >
+                Ver Doações & SUB
+              </button>
             </div>
           </div>
         </div>

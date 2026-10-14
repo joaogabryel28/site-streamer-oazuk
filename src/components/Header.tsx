@@ -95,7 +95,7 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
           >
             <Heart className={`w-4 h-4 ${currentView === 'donations' ? 'fill-white' : 'text-pink-500'}`} />
-            <span className="hidden sm:inline">Doações</span>
+            <span className="hidden sm:inline">Doações & SUB</span>
           </button>
 
           {/* Aba Informações / Sobre */}

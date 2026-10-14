@@ -13,6 +13,8 @@ import {
   ShieldAlert,
   DollarSign,
   Zap,
+  Star,
+  Tv,
 } from 'lucide-react';
 
 interface DonationsViewProps {
@@ -23,10 +25,15 @@ export const DonationsView: React.FC<DonationsViewProps> = ({ streamer }) => {
   const { isDark } = useTheme();
   const [copiedPix, setCopiedPix] = useState(false);
 
-  const pixLink = streamer.livepixUrl || 'https://livepix.gg/azuk';
+  // LivePix link from Twitch profile
+  const livepixUrl = streamer.livepixUrl || 'https://livepix.gg/azuk';
+  const pixggUrl = streamer.pixggUrl || 'https://pixgg.com/azuk';
+  const streamlabsUrl = streamer.streamlabsUrl || 'https://streamlabs.com/oazuk/tip';
+  // Direct Twitch Subscribe Link (opens sub modal on twitch.tv/oazuk)
+  const twitchSubUrl = 'https://www.twitch.tv/subs/oazuk';
 
-  const handleCopyPix = () => {
-    navigator.clipboard.writeText(pixLink);
+  const handleCopyPixLink = () => {
+    navigator.clipboard.writeText(livepixUrl);
     setCopiedPix(true);
     setTimeout(() => setCopiedPix(false), 2500);
   };
@@ -55,48 +62,145 @@ export const DonationsView: React.FC<DonationsViewProps> = ({ streamer }) => {
       <div className="max-w-5xl mx-auto space-y-8 animate-fade-in">
         {/* Header Hero */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-pink-500/10 text-pink-600 dark:text-pink-300 border border-pink-500/20">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-pink-500/10 text-pink-600 dark:text-pink-300 border border-pink-500/20">
             <Heart className="w-3.5 h-3.5 fill-pink-500 text-pink-500" />
-            <span>Apoie as Transmissões</span>
+            <span>Apoie as Transmissões & Inscrições</span>
           </div>
 
           <h1 className={`text-3xl sm:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Contribua com a Live do <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">{streamer.name}</span>
+            Apoie a Live do <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500">{streamer.name}</span>
           </h1>
 
-          <p className={`max-w-2xl mx-auto text-sm sm:text-base leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}>
+          <p className={`max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}>
             "As doações ajudam diretamente a manter a live ativa todos os dias com qualidade, novos equipamentos e jogos. O valor não importa, o que importa é que veio do coração!"
           </p>
         </div>
 
-        {/* Primary Donation Methods Grid */}
+        {/* =========================================================================
+            DESTAQUE 1: INSCREVA-SE NA TWITCH (SUB) COM BOTÃO DIRETO E VANTAGENS
+            ========================================================================= */}
+        <div
+          className={`p-6 sm:p-8 rounded-3xl border shadow-2xl relative overflow-hidden transition-all duration-300 ${
+            isDark
+              ? 'bg-gradient-to-br from-[#1a1329] via-[#121620] to-[#0c0e14] border-purple-500/40 shadow-purple-950/30'
+              : 'bg-gradient-to-br from-purple-50/90 via-white to-pink-50/60 border-purple-200 shadow-purple-100'
+          }`}
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            {/* Left Column: Sub Info & Direct Action */}
+            <div className="space-y-4 max-w-xl">
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-[#9146FF] text-white shadow-md flex items-center gap-1.5">
+                  <Tv className="w-3 h-3" />
+                  <span>Twitch Sub Oficial</span>
+                </span>
+                <span className={`text-xs font-semibold ${isDark ? 'text-purple-300' : 'text-purple-700'}`}>
+                  (Inscrição com Prime Grátis)
+                </span>
+              </div>
+
+              <div>
+                <h2 className={`text-2xl sm:text-3xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Seja um <span className="text-[#9146FF]">SUB</span> no canal do oAzuK
+                </h2>
+                <p className={`text-xs sm:text-sm mt-1.5 leading-relaxed ${isDark ? 'text-zinc-300' : 'text-slate-600'}`}>
+                  Ao clicar no botão abaixo, você é direcionado diretamente para o modal de inscrição na Twitch. Se você possui Amazon Prime, sua sub é 100% gratuita todo mês pelo Prime Gaming!
+                </p>
+              </div>
+
+              {/* Botão para dar SUB na Twitch direto */}
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <a
+                  href={twitchSubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3.5 rounded-2xl font-bold text-sm bg-gradient-to-r from-[#9146FF] to-[#772ce8] hover:from-[#772ce8] hover:to-[#5c16c5] text-white transition-all duration-200 shadow-xl shadow-[#9146FF]/30 hover:shadow-[#9146FF]/50 flex items-center justify-center gap-2.5 group cursor-pointer hover:scale-[1.02]"
+                >
+                  <svg className="w-5 h-5 fill-white group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+                    <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" />
+                  </svg>
+                  <span>Dar SUB na Twitch Agora</span>
+                  <ExternalLink className="w-4 h-4 opacity-80 group-hover:opacity-100" />
+                </a>
+
+                <span className={`text-[11px] text-center sm:text-left ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
+                  Abre a página direto com o botão de inscrição ativado
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column: Vantagens de se Inscrever (SUB) - Exatamente como no print */}
+            <div
+              className={`p-5 rounded-2xl border flex-1 min-w-[280px] lg:max-w-md ${
+                isDark
+                  ? 'bg-purple-950/30 border-purple-500/30 shadow-lg shadow-purple-950/40'
+                  : 'bg-purple-50/80 border-purple-200 shadow-sm'
+              }`}
+            >
+              <div className="flex items-center gap-2 text-sm font-bold text-purple-600 dark:text-purple-300 mb-3">
+                <Star className="w-4 h-4 fill-purple-500 text-purple-500" />
+                <span>Vantagens de se Inscrever (SUB):</span>
+              </div>
+
+              <ul className={`text-xs space-y-2 ${isDark ? 'text-zinc-200' : 'text-slate-700'}`}>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 flex-shrink-0" />
+                  <span>Assista à live sem anúncios (Ad-Free)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 flex-shrink-0" />
+                  <span>2x pontos na loja de recompensas da live</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 flex-shrink-0" />
+                  <span>Emotes exclusivos e distintivo no chat</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 flex-shrink-0" />
+                  <span>Participação nos sorteios da comunidade</span>
+                </li>
+              </ul>
+
+              <div className={`mt-3.5 pt-3 border-t text-[11px] flex items-center gap-1.5 ${
+                isDark ? 'border-purple-500/20 text-purple-300/80' : 'border-purple-200 text-purple-700'
+              }`}>
+                <Sparkles className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" />
+                <span>Inscrição disponível via Prime Gaming sem custo adicional.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* =========================================================================
+            DESTAQUE 2: DOAÇÕES VIA PIX (LIVEPIX & PIXGG DA TWITCH) E STREAMLABS
+            ========================================================================= */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* 1. LivePix (Alerta na Tela com Mensagem de Voz TTS) */}
+          {/* 1. LivePix (Alerta na Tela com Mensagem de Voz TTS - Perfil Oficial da Twitch) */}
           <div
             className={`p-6 sm:p-8 rounded-3xl border flex flex-col justify-between shadow-2xl relative overflow-hidden transition-all duration-300 group hover:scale-[1.01] ${
               isDark
-                ? 'bg-gradient-to-br from-[#181226] via-[#121620] to-[#0f1118] border-purple-500/30 hover:border-purple-500/60 shadow-purple-950/20'
-                : 'bg-gradient-to-br from-purple-50/80 via-white to-pink-50/50 border-purple-200 shadow-purple-100/50'
+                ? 'bg-gradient-to-br from-[#181226] via-[#121620] to-[#0f1118] border-pink-500/30 hover:border-pink-500/60 shadow-pink-950/20'
+                : 'bg-gradient-to-br from-pink-50/80 via-white to-purple-50/50 border-pink-200 shadow-pink-100/50'
             }`}
           >
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-purple-600 text-white shadow-md">
-                  Mais Popular • Alerta na Tela
+                <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-pink-600 text-white shadow-md">
+                  PIX Oficial • Alerta na Tela
                 </span>
-                <Zap className="w-5 h-5 text-purple-400" />
+                <Zap className="w-5 h-5 text-pink-400" />
               </div>
 
               <div>
                 <h3 className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  LivePix
+                  LivePix (PIX com Voz)
                 </h3>
                 <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}>
-                  Sua mensagem é lida em voz alta na live (TTS) e o som de alerta toca instantaneamente na transmissão!
+                  Configurado no perfil oficial da Twitch do oAzuK. Sua mensagem é lida em voz alta na stream (TTS) e o som de alerta toca ao vivo!
                 </p>
               </div>
 
-              {/* QR Code / Copy Link Card */}
+              {/* QR Code & Direct Link */}
               <div
                 className={`p-4 rounded-2xl border flex items-center gap-4 ${
                   isDark
@@ -110,13 +214,13 @@ export const DonationsView: React.FC<DonationsViewProps> = ({ streamer }) => {
 
                 <div className="flex-1 min-w-0">
                   <span className={`text-[11px] font-bold block ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
-                    Link Oficial do LivePix:
+                    PIX Oficial (LivePix):
                   </span>
                   <p className="text-xs font-mono font-bold text-pink-500 truncate mt-0.5">
-                    {pixLink}
+                    {livepixUrl}
                   </p>
                   <span className={`text-[10px] ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>
-                    Pix imediato sem taxas
+                    Doações a partir de R$ 1,00 • Sem taxas
                   </span>
                 </div>
               </div>
@@ -125,18 +229,18 @@ export const DonationsView: React.FC<DonationsViewProps> = ({ streamer }) => {
             <div className="space-y-2 pt-6">
               <div className="flex gap-2">
                 <a
-                  href={pixLink}
+                  href={livepixUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white transition shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white transition shadow-lg shadow-pink-600/30 flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <span>Abrir LivePix</span>
+                  <span>Abrir LivePix Oficial</span>
                   <ExternalLink className="w-4 h-4" />
                 </a>
 
                 <button
                   type="button"
-                  onClick={handleCopyPix}
+                  onClick={handleCopyPixLink}
                   className={`py-3 px-4 rounded-xl text-xs font-bold border transition flex items-center justify-center gap-1.5 cursor-pointer ${
                     copiedPix
                       ? 'bg-emerald-600 text-white border-emerald-500'
@@ -154,28 +258,32 @@ export const DonationsView: React.FC<DonationsViewProps> = ({ streamer }) => {
                   ) : (
                     <>
                       <Copy className="w-4 h-4" />
-                      <span>Copiar</span>
+                      <span>Copiar Link</span>
                     </>
                   )}
                 </button>
               </div>
 
-              {streamer.pixggUrl && (
+              {/* Botão PixGG Oficial alternativo (da descrição da Twitch) */}
+              {pixggUrl && (
                 <a
-                  href={streamer.pixggUrl}
+                  href={pixggUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`block text-center text-[11px] underline py-1 transition ${
-                    isDark ? 'text-zinc-400 hover:text-white' : 'text-slate-500 hover:text-slate-800'
+                  className={`block text-center text-xs py-2 px-3 rounded-xl border font-semibold transition ${
+                    isDark
+                      ? 'border-white/10 bg-white/5 text-zinc-300 hover:text-white hover:bg-white/10'
+                      : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-slate-900'
                   }`}
                 >
-                  Ou doar via PixGG alternativo ({streamer.pixggUrl.replace('https://', '')})
+                  <span>Ou doar via PixGG: </span>
+                  <span className="font-mono text-pink-500 underline font-bold">pixgg.com/azuk</span>
                 </a>
               )}
             </div>
           </div>
 
-          {/* 2. Streamlabs Tips (Dólar / Euro / Cartão Internacional) */}
+          {/* 2. Streamlabs Tips (Dólar / Euro / Cartão Internacional - Da descrição da Twitch) */}
           <div
             className={`p-6 sm:p-8 rounded-3xl border flex flex-col justify-between shadow-2xl relative overflow-hidden transition-all duration-300 group hover:scale-[1.01] ${
               isDark
@@ -196,7 +304,7 @@ export const DonationsView: React.FC<DonationsViewProps> = ({ streamer }) => {
                   Streamlabs Tip
                 </h3>
                 <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}>
-                  Para quem mora no exterior ou prefere doar em Dólar, Euro ou Cartão de Crédito internacional (PayPal, etc.).
+                  Configurado no painel da Twitch para quem mora no exterior ou prefere doar em Dólar, Euro ou Cartão de Crédito internacional (PayPal, etc.).
                 </p>
               </div>
 
@@ -209,26 +317,30 @@ export const DonationsView: React.FC<DonationsViewProps> = ({ streamer }) => {
               >
                 <div className="flex items-center gap-2 text-xs font-semibold text-blue-400">
                   <Sparkles className="w-4 h-4" />
-                  <span>Métodos Aceitos:</span>
+                  <span>Métodos Internacionais:</span>
                 </div>
                 <div className={`text-xs flex flex-wrap gap-2 ${isDark ? 'text-zinc-300' : 'text-slate-600'}`}>
-                  <span className="px-2 py-0.5 rounded bg-black/20 border border-white/5">PayPal</span>
-                  <span className="px-2 py-0.5 rounded bg-black/20 border border-white/5">Cartão de Crédito</span>
-                  <span className="px-2 py-0.5 rounded bg-black/20 border border-white/5">USD / EUR</span>
+                  <span className="px-2 py-0.5 rounded bg-black/20 border border-white/5 font-medium">PayPal</span>
+                  <span className="px-2 py-0.5 rounded bg-black/20 border border-white/5 font-medium">Cartão de Crédito</span>
+                  <span className="px-2 py-0.5 rounded bg-black/20 border border-white/5 font-medium">USD / EUR</span>
                 </div>
               </div>
             </div>
 
-            <div className="pt-6">
+            <div className="pt-6 space-y-2">
               <a
-                href={streamer.streamlabsUrl || 'https://streamlabs.com/oazuk/tip'}
+                href={streamlabsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2"
+                className="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Doar pelo Streamlabs</span>
+                <span>Doar pelo Streamlabs (USD/EUR)</span>
                 <ExternalLink className="w-4 h-4" />
               </a>
+
+              <p className={`text-[11px] text-center ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>
+                Link da Twitch: streamlabs.com/oazuk/tip
+              </p>
             </div>
           </div>
         </div>
@@ -250,12 +362,12 @@ export const DonationsView: React.FC<DonationsViewProps> = ({ streamer }) => {
                 </h2>
               </div>
               <p className={`text-xs mt-0.5 ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
-                Ao doar esses valores específicos, o áudio toca na live com o clássico som estourado!
+                Ao doar esses valores específicos pelo PIX ou bits, o áudio toca na live com o clássico som estourado!
               </p>
             </div>
 
             <span className="text-[11px] font-mono text-pink-500 bg-pink-500/10 px-2.5 py-1 rounded-lg border border-pink-500/20 self-start sm:self-auto">
-              Configurado na Twitch
+              Configurado no Painel da Twitch
             </span>
           </div>
 
@@ -301,11 +413,10 @@ export const DonationsView: React.FC<DonationsViewProps> = ({ streamer }) => {
         >
           <ShieldAlert className="w-5 h-5 text-amber-500 flex-shrink-0" />
           <p>
-            <strong>Aviso importante:</strong> As doações são voluntárias e destinadas ao apoio e manutenção das transmissões ao vivo. Todas as doações são finais e não reembolsáveis.
+            <strong>Aviso importante:</strong> As doações e inscrições são voluntárias e destinadas ao apoio e manutenção das transmissões ao vivo. Todas as doações são finais e não reembolsáveis.
           </p>
         </div>
       </div>
     </section>
   );
 };
-
