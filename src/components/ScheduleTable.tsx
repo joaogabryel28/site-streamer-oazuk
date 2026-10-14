@@ -479,168 +479,229 @@ export const ScheduleTable: React.FC<ScheduleTableProps> = ({
         )}
 
         {/* =========================================================================
-            VIEW 2: CARDS VERTICAIS COMPACTOS (Classic 2:3 vertical posters, scaled down)
+            VIEW 2: CARDS VERTICAIS (Idêntico ao painel de administração / screenshot)
             ========================================================================= */}
         {viewMode === 'cards' && (
-          <div className="overflow-x-auto no-scrollbar pb-2">
+          <div
+            className={`border rounded-2xl overflow-hidden shadow-2xl transition-colors ${
+              isDark
+                ? 'bg-[#121620]/95 border-white/10'
+                : 'bg-white border-slate-200 shadow-slate-200/50'
+            }`}
+          >
+            {/* Header da Seção de Conteúdos por Dia */}
             <div
-              className={`min-w-[980px] backdrop-blur-xl border rounded-2xl overflow-hidden shadow-2xl p-3 transition-colors ${
-                isDark
-                  ? 'bg-black/60 border-white/10'
-                  : 'bg-white/95 border-slate-200 shadow-slate-200/50'
+              className={`p-4 sm:p-5 border-b flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                isDark ? 'border-white/10' : 'border-slate-200'
               }`}
             >
-              <div className="grid grid-cols-[80px_repeat(7,minmax(0,1fr))] gap-2.5">
-                {/* Time Column Header */}
-                <div
-                  className={`flex flex-col items-center justify-center pb-2 border-b h-[46px] text-center ${
-                    isDark ? 'border-white/10' : 'border-slate-200'
-                  }`}
-                >
-                  <span className={`font-bold text-xs ${isDark ? 'text-zinc-300' : 'text-slate-700'}`}>
-                    Horários
-                  </span>
-                  <span className={`text-[10px] font-mono ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>
-                    Sessões
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className={`font-bold text-base sm:text-lg ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    Conteúdos por Dia da Semana
+                  </h3>
+                  <span
+                    className={`text-xs px-2.5 py-0.5 rounded-full font-mono font-semibold ${
+                      isDark ? 'bg-white/10 text-zinc-300' : 'bg-slate-100 text-slate-700'
+                    }`}
+                  >
+                    {weekDetails.label}
                   </span>
                 </div>
+                <p className={`text-xs mt-0.5 ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
+                  Grade organizada por dia com cartazes verticais (2:3) e horários de cada filme ou episódio.
+                </p>
+              </div>
 
-                {/* 7 Day Headers */}
-                {weekDetails.days.map((dayInfo) => {
-                  const isToday = dayInfo.isToday;
-                  return (
+              {isLoggedIn && onManageClick && (
+                <button
+                  type="button"
+                  onClick={onManageClick}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white text-xs font-bold shadow-md shadow-pink-600/20 transition self-start sm:self-auto cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Gerenciar no Painel</span>
+                </button>
+              )}
+            </div>
+
+            {/* Lista dos Dias da Semana */}
+            <div className="p-4 sm:p-6 space-y-5">
+              {weekDetails.days.map((dayInfo) => {
+                const dayData = schedule.find((d) => d.dayOfWeek === dayInfo.dayOfWeek);
+                const items = dayData?.items || [];
+                const hasItems = items.length > 0;
+
+                return (
+                  <div
+                    key={dayInfo.dayOfWeek}
+                    className={`p-4 sm:p-5 rounded-2xl border space-y-3.5 transition-all ${
+                      dayInfo.isToday
+                        ? isDark
+                          ? 'bg-gradient-to-r from-pink-950/20 via-[#0b0e14] to-[#0b0e14] border-pink-500/40 shadow-lg shadow-pink-950/20'
+                          : 'bg-gradient-to-r from-pink-50/70 via-white to-white border-pink-300 shadow-md shadow-pink-100/60'
+                        : isDark
+                        ? 'bg-[#0b0e14] border-white/5 hover:border-white/10'
+                        : 'bg-slate-50 border-slate-200/80 hover:border-slate-300'
+                    }`}
+                  >
+                    {/* Cabeçalho do Dia */}
                     <div
-                      key={dayInfo.dayOfWeek}
-                      className={`flex flex-col items-center justify-center pb-2 border-b h-[46px] text-center ${
-                        isToday
-                          ? 'border-pink-500'
+                      className={`flex items-center justify-between border-b pb-2.5 ${
+                        dayInfo.isToday
+                          ? isDark
+                            ? 'border-pink-500/30'
+                            : 'border-pink-200'
                           : isDark
-                          ? 'border-white/10'
+                          ? 'border-white/5'
                           : 'border-slate-200'
                       }`}
                     >
-                      <div className="flex items-center justify-center gap-1">
-                        {isToday && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse" />
-                        )}
+                      <div className="flex items-center gap-2 sm:gap-2.5">
                         <span
-                          className={`font-extrabold text-xs sm:text-sm ${
-                            isToday
+                          className={`font-extrabold text-sm sm:text-base ${
+                            dayInfo.isToday
                               ? isDark
-                                ? 'text-white'
-                                : 'text-pink-900'
+                                ? 'text-pink-300'
+                                : 'text-pink-600'
                               : isDark
-                              ? 'text-zinc-200'
-                              : 'text-slate-800'
+                              ? 'text-white'
+                              : 'text-slate-900'
                           }`}
                         >
                           {dayInfo.dayOfWeek}
                         </span>
+                        <span
+                          className={`text-xs font-mono ${
+                            dayInfo.isToday
+                              ? isDark
+                                ? 'text-pink-400 font-bold'
+                                : 'text-pink-600 font-bold'
+                              : isDark
+                              ? 'text-zinc-500'
+                              : 'text-slate-400'
+                          }`}
+                        >
+                          {dayInfo.date}
+                        </span>
+                        {dayInfo.isToday && (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-pink-500/20 text-pink-600 dark:text-pink-300 border border-pink-500/40">
+                            HOJE
+                          </span>
+                        )}
                       </div>
-                      <span
-                        className={`text-[11px] font-mono ${
-                          isToday
-                            ? isDark
-                              ? 'text-pink-300 font-bold'
-                              : 'text-pink-600 font-bold'
-                            : isDark
-                            ? 'text-zinc-400'
-                            : 'text-slate-500'
+
+                      {isLoggedIn && onManageClick ? (
+                        <button
+                          type="button"
+                          onClick={onManageClick}
+                          className="text-xs text-pink-600 dark:text-pink-400 hover:underline flex items-center gap-1 font-semibold cursor-pointer"
+                        >
+                          <Plus className="w-3 h-3" />
+                          <span>Adicionar card em {dayInfo.dayOfWeek}</span>
+                        </button>
+                      ) : (
+                        <span
+                          className={`text-[11px] font-mono ${
+                            isDark ? 'text-zinc-500' : 'text-slate-400'
+                          }`}
+                        >
+                          {items.length === 0 || (items.length === 1 && items[0].isFolga)
+                            ? 'Folga'
+                            : `${items.length} ${items.length === 1 ? 'conteúdo' : 'conteúdos'}`}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Cards do Dia */}
+                    {!hasItems ? (
+                      <div
+                        className={`p-3.5 rounded-xl border border-dashed inline-flex items-center gap-2 text-xs ${
+                          isDark
+                            ? 'border-white/10 bg-white/[0.02] text-zinc-400'
+                            : 'border-slate-200 bg-white text-slate-500'
                         }`}
                       >
-                        {dayInfo.date}
-                      </span>
-                    </div>
-                  );
-                })}
+                        <Moon className="w-4 h-4 text-purple-400" />
+                        <span>Dia de Folga</span>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                        {items.map((card) => {
+                          if (card.isFolga) {
+                            return (
+                              <div
+                                key={card.id}
+                                className={`col-span-2 sm:col-span-1 p-3 rounded-xl border flex items-center gap-2 text-xs ${
+                                  isDark
+                                    ? 'border-white/10 bg-white/[0.02] text-zinc-300'
+                                    : 'border-slate-200 bg-white text-slate-700'
+                                }`}
+                              >
+                                <Moon className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                                <span className="font-semibold">Dia de Folga</span>
+                              </div>
+                            );
+                          }
 
-                {/* Left Column Session Times */}
-                <div className="flex flex-col space-y-2.5 pt-1">
-                  {[
-                    { time: '14:00', label: 'Tarde' },
-                    { time: '17:00', label: 'Fim de Tarde' },
-                    { time: '20:30', label: 'Noite' },
-                  ].map((sess, idx) => (
-                    <div
-                      key={idx}
-                      className={`w-full h-[155px] rounded-xl border flex flex-col items-center justify-center p-2 text-center transition ${
-                        isDark
-                          ? 'border-white/10 bg-black/40 text-white'
-                          : 'border-slate-200 bg-slate-100/70 text-slate-800'
-                      }`}
-                    >
-                      <Clock className="w-4 h-4 text-pink-400 mb-1" />
-                      <span className="font-mono font-bold text-xs">{sess.time}</span>
-                      <span className={`text-[9px] mt-0.5 ${isDark ? 'text-zinc-400' : 'text-slate-500'}`}>
-                        {sess.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Day Columns with Compact Vertical Cards */}
-                {weekDetails.days.map((dayInfo) => {
-                  const dayData = schedule.find((d) => d.dayOfWeek === dayInfo.dayOfWeek);
-
-                  return (
-                    <div key={dayInfo.dayOfWeek} className="flex flex-col space-y-2.5 pt-1">
-                      {(dayData?.items || []).map((card) => {
-                        if (card.isFolga) {
                           return (
                             <div
                               key={card.id}
-                              className={`w-full h-[155px] rounded-xl border border-dashed flex flex-col items-center justify-center transition ${
+                              onClick={() => setActiveModalCard(card)}
+                              className={`group relative rounded-xl border overflow-hidden p-2 flex flex-col justify-between shadow-xs transition-all duration-200 cursor-pointer hover:scale-[1.02] ${
                                 isDark
-                                  ? 'border-white/10 bg-black/30 text-zinc-500'
-                                  : 'border-slate-300 bg-slate-100/70 text-slate-500'
+                                  ? 'border-white/10 bg-black hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-950/30'
+                                  : 'border-slate-200 bg-white hover:border-pink-500/50 hover:shadow-md'
                               }`}
                             >
-                              <Moon className="w-5 h-5 text-zinc-400 mb-1" />
-                              <span className="text-xs font-semibold">Folga</span>
+                              {/* Capa Vertical (2:3) */}
+                              <div className="aspect-[2/3] w-full rounded-lg overflow-hidden bg-zinc-900 mb-2 relative">
+                                <img
+                                  src={card.posterUrl}
+                                  alt={card.title}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src =
+                                      'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80';
+                                  }}
+                                />
+                                {card.badge && (
+                                  <div className="absolute top-1 right-1">
+                                    <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-extrabold uppercase bg-black/85 backdrop-blur-md text-white border border-white/20 tracking-wider shadow">
+                                      {card.badge}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Título e Horário */}
+                              <div className="space-y-0.5">
+                                <div
+                                  className={`text-xs font-bold truncate group-hover:text-pink-400 transition-colors ${
+                                    isDark ? 'text-white' : 'text-slate-900'
+                                  }`}
+                                  title={card.title}
+                                >
+                                  {card.title}
+                                </div>
+                                <div
+                                  className={`text-[10px] sm:text-[11px] font-mono flex items-center gap-1 ${
+                                    isDark ? 'text-zinc-400' : 'text-slate-500'
+                                  }`}
+                                >
+                                  <Clock className="w-2.5 h-2.5 text-pink-400 flex-shrink-0" />
+                                  <span className="truncate">{card.time || '--:--'}</span>
+                                </div>
+                              </div>
                             </div>
                           );
-                        }
-
-                        return (
-                          <div
-                            key={card.id}
-                            onClick={() => setActiveModalCard(card)}
-                            className={`group relative w-full h-[155px] rounded-xl overflow-hidden border bg-black shadow-md transition-all duration-200 cursor-pointer hover:scale-[1.02] ${
-                              isDark
-                                ? 'border-white/10 hover:border-pink-500/60'
-                                : 'border-slate-300 hover:border-pink-500'
-                            }`}
-                          >
-                            <img
-                              src={card.posterUrl}
-                              alt={card.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              loading="lazy"
-                            />
-                            {card.badge && (
-                              <div className="absolute top-1.5 right-1.5">
-                                <span className="px-1.5 py-0.2 rounded text-[9px] font-extrabold uppercase bg-black/80 backdrop-blur-md text-white border border-white/20">
-                                  {card.badge}
-                                </span>
-                              </div>
-                            )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-                            <div className="absolute bottom-1.5 left-1.5 right-1.5 space-y-0.5">
-                              <h4 className="font-bold text-white text-[11px] truncate group-hover:text-pink-300 transition">
-                                {card.title}
-                              </h4>
-                              <div className="flex items-center gap-1 text-[9px] font-mono text-zinc-300">
-                                <Clock className="w-2.5 h-2.5 text-pink-400" />
-                                <span>{card.time}</span>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
-              </div>
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

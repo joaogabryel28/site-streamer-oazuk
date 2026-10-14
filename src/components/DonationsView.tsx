@@ -308,3 +308,4 @@ export const DonationsView: React.FC<DonationsViewProps> = ({ streamer }) => {
     </section>
   );
 };
+
